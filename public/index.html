@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgentX Style Chat with Files</title>
+    <title>AgentX Style Chat - Dark Mode</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
+        /* Updated Body for Dark Mode */
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: #E6E7E9; 
-            background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+            background-color: #121212; /* Very dark background */
+            /* Darker dot pattern for subtle texture */
+            background-image: radial-gradient(#2a2a2a 1px, transparent 1px);
             background-size: 24px 24px;
+            color: #e0e0e0; /* Light text general color */
             margin: 0; 
             padding: 0; 
             display: flex;
@@ -20,8 +23,9 @@
             min-height: 100vh;
         }
 
+        /* Updated Navbar for Dark Mode */
         .navbar {
-            background-color: #161616;
+            background-color: #1a1a1a;
             color: #ffffff;
             border-radius: 40px;
             padding: 12px 30px;
@@ -31,7 +35,7 @@
             width: 80%;
             max-width: 900px;
             margin-top: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Stronger shadow */
             font-size: 14px;
             font-weight: 500;
         }
@@ -46,9 +50,10 @@
             cursor: pointer;
         }
 
+        /* Updated Chat Container for Dark Mode */
         .chat-container {
-            background-color: #dadddf;
-            border: 1px solid #c8cacc;
+            background-color: #1e1e1e; /* Darker than body */
+            border: 1px solid #333; /* Darker border */
             border-radius: 24px;
             width: 90%;
             max-width: 450px;
@@ -56,25 +61,27 @@
             margin-top: 50px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             overflow: hidden;
         }
 
+        /* Updated Header for Dark Mode */
         .chat-header {
             padding: 15px 20px;
-            border-bottom: 1px solid #c8cacc;
+            border-bottom: 1px solid #333;
             display: flex;
             align-items: center;
             gap: 10px;
             font-weight: 600;
             font-size: 14px;
-            background: #dadddf;
+            background: #1e1e1e;
+            color: #f0f0f0;
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
-            background-color: #000;
+            background-color: #4caf50; /* Green dot looks better in dark mode */
             border-radius: 50%;
         }
 
@@ -87,7 +94,14 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            /* Scrollbar styling */
+            scrollbar-width: thin;
+            scrollbar-color: #333 #1e1e1e;
         }
+
+        #messages::-webkit-scrollbar { width: 6px; }
+        #messages::-webkit-scrollbar-track { background: #1e1e1e; }
+        #messages::-webkit-scrollbar-thumb { background-color: #333; border-radius: 3px; }
 
         .message {
             max-width: 75%;
@@ -111,25 +125,29 @@
             font-weight: 500;
         }
 
+        /* Received Message: Dark Gray bubble */
         .message.received {
-            background-color: #E9ECEF;
-            color: #161616;
+            background-color: #2d2d2d;
+            color: #f0f0f0;
             align-self: flex-start;
             border-radius: 18px 18px 18px 4px;
         }
 
+        /* Sent Message: Accent Blue bubble */
         .message.sent {
-            background-color: #161616;
+            background-color: #1d4ed8; /* Modern blue accent */
             color: #ffffff;
             align-self: flex-end;
             border-radius: 18px 18px 4px 18px;
         }
 
+        /* Updated Input Area for Dark Mode */
         #form { 
             display: flex; 
             align-items: center;
             padding: 15px; 
-            background: #dadddf;
+            background: #1e1e1e;
+            border-top: 1px solid #333;
             gap: 10px; 
         }
 
@@ -137,7 +155,7 @@
             background: none;
             border: none;
             cursor: pointer;
-            color: #555;
+            color: #a0a0a0; /* Grayer icons */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -147,27 +165,33 @@
         }
 
         .icon-btn:hover {
-            background-color: #c8cacc;
-            color: #161616;
+            background-color: #2d2d2d;
+            color: #fff;
         }
 
+        /* Updated Input Fields for Dark Mode */
         #input { 
             flex-grow: 1; 
             padding: 12px 20px; 
             font-size: 14px; 
-            border: 1px solid #c8cacc; 
+            border: 1px solid #333; 
             border-radius: 30px; 
-            background-color: #e9ecef;
+            background-color: #2d2d2d; /* Lighter than container */
+            color: #fff;
             outline: none;
         }
 
         #input:focus {
-            border-color: #999;
-            background-color: #fff;
+            border-color: #1d4ed8; /* Blue focus accent */
+            background-color: #333;
         }
 
+        /* Update placeolder color */
+        #input::placeholder { color: #888; }
+
+        /* Updated Send button for consistency */
         .send-btn {
-            background-color: #161616;
+            background-color: #1d4ed8; /* Blue accent */
             color: white;
             border: none;
             border-radius: 50%;
@@ -177,10 +201,11 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: background-color 0.2s;
         }
         
-        .send-btn:hover { background-color: #333; }
-        .send-btn svg { margin-left: -2px; /* optical alignment */ }
+        .send-btn:hover { background-color: #2563eb; } /* Lighter blue hover */
+        .send-btn svg { margin-left: -2px; }
 
     </style>
 </head>
@@ -194,7 +219,7 @@
     <div class="chat-container">
         <div class="chat-header">
             <div class="status-dot"></div>
-            Agent AI
+            Agent AI (Dark)
         </div>
         
         <ul id="messages"></ul>
@@ -221,6 +246,7 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        // JavaScript logic remains unchanged, as it handles data, not styling.
         const socket = io();
         const mySessionId = Math.random().toString(36).substring(2, 10);
 
@@ -230,7 +256,6 @@
         const attachBtn = document.getElementById('attach-btn');
         const fileInput = document.getElementById('file-input');
 
-        // Handle Text Submission
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             if (input.value.trim()) {
@@ -243,12 +268,10 @@
             }
         });
 
-        // Trigger hidden file input when paperclip is clicked
         attachBtn.addEventListener('click', () => {
             fileInput.click();
         });
 
-        // Handle File Selection and Conversion to Base64
         fileInput.addEventListener('change', function() {
             const file = this.files[0];
             if (!file) return;
@@ -256,8 +279,6 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const base64File = e.target.result;
-                
-                // Emit file data to server
                 socket.emit('chat_message', {
                     type: 'file',
                     fileData: base64File,
@@ -266,37 +287,28 @@
                     senderId: mySessionId
                 });
             };
-            
-            // Read file as Data URL (Base64)
             reader.readAsDataURL(file);
-            
-            // Reset input so the same file can be selected again if needed
             this.value = ''; 
         });
 
-        // Handle Incoming Messages (Text and Files)
         socket.on('chat_message', (data) => {
             const item = document.createElement('li');
             item.classList.add('message');
             
-            // Apply styling based on sender
             if (data.senderId === mySessionId) {
                 item.classList.add('sent');
             } else {
                 item.classList.add('received');
             }
             
-            // Render content based on message type
             if (data.type === 'text') {
                 item.textContent = data.text;
             } else if (data.type === 'file') {
                 if (data.fileType.startsWith('image/')) {
-                    // Render image
                     const img = document.createElement('img');
                     img.src = data.fileData;
                     item.appendChild(img);
                 } else {
-                    // Render download link for documents/other files
                     const link = document.createElement('a');
                     link.href = data.fileData;
                     link.download = data.fileName;
