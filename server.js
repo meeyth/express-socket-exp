@@ -12,6 +12,13 @@ const io = new Server(server);
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
+
+app.get('/about', (req, res) => {
+    res.sendFile(__dirname + '/about.html');
+});
+
+
+
 // Listen for incoming Socket connections
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}`);
