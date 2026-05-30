@@ -14,7 +14,7 @@ app.use(express.static('public'));
 
 
 app.get('/about', (req, res) => {
-    res.sendFile(__dirname + '/about.html');
+    res.sendFile(__dirname + '/public/about.html');
 });
 
 
