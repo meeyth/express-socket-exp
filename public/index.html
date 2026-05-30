@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgentX Style Chat</title>
+    <title>AgentX Style Chat with Files</title>
     <style>
-        /* Import a clean, modern sans-serif font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: #E6E7E9; /* Light gray background */
-            /* Subtle dot pattern to mimic the textured background */
+            background-color: #E6E7E9; 
             background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
             background-size: 24px 24px;
             margin: 0; 
@@ -22,7 +20,6 @@
             min-height: 100vh;
         }
 
-        /* Top Navigation Pill */
         .navbar {
             background-color: #161616;
             color: #ffffff;
@@ -40,9 +37,6 @@
         }
 
         .navbar-brand { font-weight: 600; letter-spacing: 1px; font-size: 16px; }
-        .navbar-links span { margin: 0 15px; color: #a0a0a0; cursor: pointer; }
-        .navbar-links span:hover { color: #fff; }
-        
         .navbar-btn {
             background: #fff;
             color: #161616;
@@ -52,20 +46,18 @@
             cursor: pointer;
         }
 
-        /* Main Chat Card */
         .chat-container {
             background-color: #dadddf;
             border: 1px solid #c8cacc;
             border-radius: 24px;
             width: 90%;
             max-width: 450px;
-            height: 550px;
+            height: 600px;
             margin-top: 50px;
             display: flex;
             flex-direction: column;
             box-shadow: 0 20px 40px rgba(0,0,0,0.08);
             overflow: hidden;
-            position: relative;
         }
 
         .chat-header {
@@ -97,13 +89,26 @@
             gap: 12px;
         }
 
-        /* Chat Bubbles */
         .message {
             max-width: 75%;
             padding: 12px 16px;
             font-size: 14px;
             line-height: 1.4;
             word-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .message img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .message a {
+            color: inherit;
+            text-decoration: underline;
+            font-weight: 500;
         }
 
         .message.received {
@@ -111,7 +116,6 @@
             color: #161616;
             align-self: flex-start;
             border-radius: 18px 18px 18px 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .message.sent {
@@ -119,15 +123,32 @@
             color: #ffffff;
             align-self: flex-end;
             border-radius: 18px 18px 4px 18px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* Input Area */
         #form { 
             display: flex; 
+            align-items: center;
             padding: 15px; 
             background: #dadddf;
             gap: 10px; 
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .icon-btn:hover {
+            background-color: #c8cacc;
+            color: #161616;
         }
 
         #input { 
@@ -138,7 +159,6 @@
             border-radius: 30px; 
             background-color: #e9ecef;
             outline: none;
-            transition: all 0.2s ease;
         }
 
         #input:focus {
@@ -146,30 +166,28 @@
             background-color: #fff;
         }
 
-        button { 
-            padding: 12px 24px; 
-            font-size: 14px; 
-            background-color: #161616; 
-            color: white; 
-            border: none; 
-            border-radius: 30px; 
-            cursor: pointer; 
-            font-weight: 600;
-            transition: background-color 0.2s;
+        .send-btn {
+            background-color: #161616;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
+        
+        .send-btn:hover { background-color: #333; }
+        .send-btn svg { margin-left: -2px; /* optical alignment */ }
 
-        button:hover { background-color: #333; }
     </style>
 </head>
 <body>
 
     <div class="navbar">
         <div class="navbar-brand">AGENTX THEME</div>
-        <div class="navbar-links" style="display: none;">
-            <span>Chatbot</span>
-            <span>Pricing</span>
-            <span>API</span>
-        </div>
         <div class="navbar-btn">Sign up - it's free</div>
     </div>
 
@@ -182,27 +200,42 @@
         <ul id="messages"></ul>
         
         <form id="form" action="">
-            <input id="input" autocomplete="off" placeholder="Type your message..." required />
-            <button>Send</button>
+            <input type="file" id="file-input" style="display: none;" />
+            
+            <button type="button" id="attach-btn" class="icon-btn" title="Attach file">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                </svg>
+            </button>
+
+            <input id="input" autocomplete="off" placeholder="Type your message..." />
+            
+            <button type="submit" class="send-btn" title="Send">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
         </form>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-        
-        // Generate a random ID for this tab so we know which messages are "ours"
         const mySessionId = Math.random().toString(36).substring(2, 10);
 
         const form = document.getElementById('form');
         const input = document.getElementById('input');
         const messages = document.getElementById('messages');
+        const attachBtn = document.getElementById('attach-btn');
+        const fileInput = document.getElementById('file-input');
 
+        // Handle Text Submission
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (input.value) {
-                // Send an object containing both the message and our session ID
+            if (input.value.trim()) {
                 socket.emit('chat_message', {
+                    type: 'text',
                     text: input.value,
                     senderId: mySessionId
                 });
@@ -210,20 +243,69 @@
             }
         });
 
+        // Trigger hidden file input when paperclip is clicked
+        attachBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Handle File Selection and Conversion to Base64
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64File = e.target.result;
+                
+                // Emit file data to server
+                socket.emit('chat_message', {
+                    type: 'file',
+                    fileData: base64File,
+                    fileName: file.name,
+                    fileType: file.type,
+                    senderId: mySessionId
+                });
+            };
+            
+            // Read file as Data URL (Base64)
+            reader.readAsDataURL(file);
+            
+            // Reset input so the same file can be selected again if needed
+            this.value = ''; 
+        });
+
+        // Handle Incoming Messages (Text and Files)
         socket.on('chat_message', (data) => {
             const item = document.createElement('li');
             item.classList.add('message');
             
-            // Check if we sent this message to style it black (sent) or gray (received)
+            // Apply styling based on sender
             if (data.senderId === mySessionId) {
                 item.classList.add('sent');
             } else {
                 item.classList.add('received');
             }
             
-            item.textContent = data.text;
-            messages.appendChild(item);
+            // Render content based on message type
+            if (data.type === 'text') {
+                item.textContent = data.text;
+            } else if (data.type === 'file') {
+                if (data.fileType.startsWith('image/')) {
+                    // Render image
+                    const img = document.createElement('img');
+                    img.src = data.fileData;
+                    item.appendChild(img);
+                } else {
+                    // Render download link for documents/other files
+                    const link = document.createElement('a');
+                    link.href = data.fileData;
+                    link.download = data.fileName;
+                    link.textContent = `📎 ${data.fileName}`;
+                    item.appendChild(link);
+                }
+            }
             
+            messages.appendChild(item);
             messages.scrollTop = messages.scrollHeight;
         });
     </script>
