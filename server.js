@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 
 // Increase max buffer size to 10MB to allow file uploads
-const io = new Server(server, { maxHttpBufferSize: 1e7 });
+const io = new Server(server, { maxHttpBufferSize: 1e10 });
 
 app.use(express.static('public'));
 
